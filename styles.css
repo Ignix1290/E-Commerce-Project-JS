@@ -952,6 +952,28 @@ footer .copyright{
     font-size: 13px;
 }
 
+/* Sign In Page */
+#signin{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f1f7f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#signin-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    background-color: white;
+    height: 45%;
+    width: 60%;
+    border-radius: 20px;
+    padding: 40px;
+}
+
 /* Start Media Query */
 @media (max-width:799px){
     .div-p1{
