@@ -9,11 +9,12 @@
 </head>
 <body>
     <div id="signin">
-        <div id=signin-container>
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <div id="signin-container">
+            <div id="googleSignInBtn"></div>
         </div>
     </div>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script src="index.js" defer></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jwt-decode/3.1.2/jwt-decode.min.js"></script>
+    <script src="index.js"></script>
 </body>
 </html>

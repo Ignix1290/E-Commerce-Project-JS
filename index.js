@@ -14,24 +14,32 @@ if(close){
     })
 }
 
-function onSignIn(googleUser) {
-    try {
-        var profile = googleUser.getBasicProfile();
-        console.log('ID: ' + profile.getId()); // Don't send this to your backend
-        console.log('Name: ' + profile.getName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail());
+// Your client ID from the Google Cloud Console
+const CLIENT_ID = '614843922014-990h9dl1djss2j4pb1halk14neod30bf.apps.googleusercontent.com';
 
-        // Redirect to home page after successful sign-in
-        window.location.href = 'home.html';
-    } catch (error) {
-        console.error('Error during sign-in: ', error);
-    }
+function handleCredentialResponse(response) {
+    const data = jwt_decode(response.credential);
+    console.log('ID: ' + data.sub);
+    console.log('Name: ' + data.name);
+    console.log('Email: ' + data.email);
+    
+    // Redirect to home page after successful sign-in
+    window.location.href = 'home.html';
 }
 
-function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
+function initGoogleSignIn() {
+    window.google.accounts.id.initialize({
+        client_id: CLIENT_ID,
+        callback: handleCredentialResponse
     });
+
+    window.google.accounts.id.renderButton(
+        document.getElementById("googleSignInBtn"),
+        { theme: "outline", size: "large" }  // customization options
+    );
+
+    window.google.accounts.id.prompt(); // Show the One Tap prompt
 }
+
+// Initialize the Google Sign-In on page load
+window.onload = initGoogleSignIn;
