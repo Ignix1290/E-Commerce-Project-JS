@@ -14,53 +14,21 @@ if(close){
     })
 }
 
-// Your client ID from the Google Cloud Console
-const CLIENT_ID = '614843922014-990h9dl1djss2j4pb1halk14neod30bf.apps.googleusercontent.com';
-
-function handleCredentialResponse(response) {
-    const data = jwt_decode(response.credential);
-    console.log('ID: ' + data.sub);
-    console.log('Name: ' + data.name);
-    console.log('Email: ' + data.email);
-    
-    // Redirect to home page after successful sign-in
-    window.location.href = 'home.html';
-}
-
-function initGoogleSignIn() {
-    window.google.accounts.id.initialize({
-        client_id: CLIENT_ID,
-        callback: handleCredentialResponse
-    });
-
-    window.google.accounts.id.renderButton(
-        document.getElementById("googleSignInBtn"),
-        { theme: "outline", size: "large" }  // customization options
-    );
-
-    window.google.accounts.id.prompt(); // Show the One Tap prompt
-}
-
-// Initialize the Google Sign-In on page load
-window.onload = initGoogleSignIn;
-
 //sproduct function
 function sproductFunction(event){
     window.location.href = "sproduct.html";
 }
 
-var MainImg = document.getElementById("MainImg");
-var smallimg = document.getElementsByClassName("small-img");
+let MainImg = document.getElementById("MainImg");
+let shopImg = document.getElementsByClassName("shopImg");
 
-smallimg[0].onclick = function(){
-    MainImg.src = smallimg[0].src;
+for(let i = 0; i < shopImg.length; i++){
+    shopImg[i].addEventListener("click", function(){
+        sessionStorage.setItem("selectedImg", shopImg[i].src);
+    });
 }
-smallimg[1].onclick = function(){
-    MainImg.src = smallimg[1].src;
-}
-smallimg[2].onclick = function(){
-    MainImg.src = smallimg[2].src;
-}
-smallimg[3].onclick = function(){
-    MainImg.src = smallimg[3].src;
+
+let selectedImg = sessionStorage.getItem("selectedImg");
+if(selectedImg){
+    MainImg.src = selectedImg;
 }
