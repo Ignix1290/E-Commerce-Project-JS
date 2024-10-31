@@ -167,3 +167,28 @@ if(selectedName){
 if(selectedPrice){
     selectedPrice.textContent = "$" + sessionStorage.getItem("selectedPrice");
 }
+
+
+// Cart Functionality
+let cartItems = [];
+
+document.querySelector(".addToCart").addEventListener("click", function(){
+    let productName = document.getElementById("shop-name").textContent;
+    let productPrice = document.getElementById("shop-price").textContent;
+    let productImage = document.querySelector(".single-pro-image img").src;
+    let productQuantity = document.querySelector("input[type='number']").value;
+
+    let existingItem = cartItems.find(item => item.name == productName);
+    if(existingItem){
+        existingItem.quantity += productQuantity;
+    }else{
+        let newItem = {
+            name: productName,
+            price: productPrice,
+            image: productImage,
+            quantity: productQuantity,
+        };
+        cartItems.push(newItem);
+    }
+    console.log(cartItems);
+});
