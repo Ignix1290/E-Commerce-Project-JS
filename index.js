@@ -170,6 +170,7 @@ if(selectedPrice){
 
 
 // Cart Functionality
+// Cart Functionality
 document.addEventListener("DOMContentLoaded", function () {
     let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
 
@@ -183,62 +184,69 @@ document.addEventListener("DOMContentLoaded", function () {
         
         cartTableBody.innerHTML = ""; // Clear the cart table
 
+        let total = 0; // Initialize total
         cartItems.forEach((item, index) => {
             const cartRow = document.createElement("tr");
+            const itemTotal = parseFloat(item.price.replace('$', '')) * item.quantity;
+            total += itemTotal; // Update total
+            
             cartRow.innerHTML = `
-                <td><button onclick="removeFromCart(${index})">Remove</button></td>
+                <td><button onclick="removeFromCart(${index})"><i class='bx bx-x-circle'></i></button></td>
                 <td><img src="${item.image}" alt="${item.name}" width="50"></td>
                 <td>${item.name}</td>
                 <td>${item.price}</td>
                 <td><input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${index}, this.value)"></td>
-                <td>$${(parseFloat(item.price.replace('$', '')) * item.quantity).toFixed(2)}</td>
+                <td>$${itemTotal.toFixed(2)}</td>
             `;
             cartTableBody.appendChild(cartRow);
         });
+
+        // Update total in the Cart Totals section
+        document.querySelector("#subtotal td:last-child").innerHTML = `$${total.toFixed(2)}`;
+        document.querySelector("#cart-add #subtotal td:last-child strong").innerHTML = `$${total.toFixed(2)}`;
     }
 
     // Function to add items to the cart
-    function addToCart() {
+    window.addToCart = function() {
         const productName = document.getElementById("shop-name").textContent;
         const productPrice = document.getElementById("shop-price").textContent;
-        const productImage = document.querySelector(".single-pro-image img").src;
-        const productQuantity = parseInt(document.querySelector("input[type='number']").value);
+        const productImage = document.getElementById("MainImg").src;
+        const productQuantity = document.querySelector('input[type="number"]').value;
 
-        const existingItem = cartItems.find(item => item.name === productName);
-        if (existingItem) {
-            existingItem.quantity += productQuantity;
+        const productExists = cartItems.find(item => item.name === productName);
+
+        if (productExists) {
+            productExists.quantity += parseInt(productQuantity);
         } else {
-            const newItem = {
+            cartItems.push({
                 name: productName,
                 price: productPrice,
                 image: productImage,
-                quantity: productQuantity
-            };
-            cartItems.push(newItem);
+                quantity: parseInt(productQuantity)
+            });
         }
 
-        // Save updated cart to localStorage
         localStorage.setItem("cartItems", JSON.stringify(cartItems));
         renderCart();
     }
 
-    // Function to update item quantity
-    window.updateQuantity = function (index, newQuantity) {
-        cartItems[index].quantity = parseInt(newQuantity);
-        localStorage.setItem("cartItems", JSON.stringify(cartItems));
-        renderCart();
+    // Function to update quantity
+    window.updateQuantity = function(index, quantity) {
+        if (quantity <= 0) {
+            removeFromCart(index);
+        } else {
+            cartItems[index].quantity = parseInt(quantity);
+            localStorage.setItem("cartItems", JSON.stringify(cartItems));
+            renderCart();
+        }
     }
 
-    // Function to remove an item from the cart
-    window.removeFromCart = function (index) {
+    // Function to remove items from cart
+    window.removeFromCart = function(index) {
         cartItems.splice(index, 1);
         localStorage.setItem("cartItems", JSON.stringify(cartItems));
         renderCart();
     }
 
-    // Attach addToCart function to button click
-    document.querySelector(".addToCart").addEventListener("click", addToCart);
-
-    // Initial render of cart on page load
-    renderCart();
+    renderCart(); // Initial render of the cart
 });
