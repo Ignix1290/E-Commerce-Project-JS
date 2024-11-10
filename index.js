@@ -177,5 +177,17 @@ for(let i = 0; i < remove_from_cart.length; i++){
     let removeBtn = remove_from_cart[i];
     removeBtn.addEventListener("click", function(event){
         event.target.parentElement.parentElement.remove();
+        updateCart();
     });
+}
+
+function updateCart(){
+    let cartRows = document.getElementsByClassName("cart-row");
+    for(let i = 0; i < cartRows.length; i++){
+        let priceElement = cartRows[i].querySelector(".cart-row-price").textContent;
+        let price = parseFloat(priceElement.replace('$', ''));
+        console.log(price);
+        let quantityElement = cartRows[i].querySelector(".cart-row-quantity");
+        console.log(quantityElement.value);
+    }
 }
