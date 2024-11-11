@@ -183,11 +183,22 @@ for(let i = 0; i < remove_from_cart.length; i++){
 
 function updateCart(){
     let cartRows = document.getElementsByClassName("cart-row");
+    let total = 0;
     for(let i = 0; i < cartRows.length; i++){
         let priceElement = cartRows[i].querySelector(".cart-row-price").textContent;
         let price = parseFloat(priceElement.replace('$', ''));
-        console.log(price);
         let quantityElement = cartRows[i].querySelector(".cart-row-quantity");
-        console.log(quantityElement.value);
+        let quantity = parseFloat(quantityElement.value);
+        let subTotalElement = cartRows[i].querySelector(".cart-row-subtotal");
+        let subTotal = price * quantity;
+        subTotalElement.textContent = `$${subTotal.toFixed(2)}`;
+        total += subTotal;
+        quantityElement.addEventListener('change', updateCart);
     }
+    let cartSubTotal = document.getElementById("cart-subtotal");
+    let cartTotal = document.getElementById("cart-total");
+    cartSubTotal.textContent = `$${total.toFixed(2)}`;  // Format the total to 2 decimal places
+    cartTotal.textContent = `$${total.toFixed(2)}`;  // Set the same value for the total
 }
+
+updateCart();
