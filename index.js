@@ -181,6 +181,20 @@ for(let i = 0; i < remove_from_cart.length; i++){
     });
 }
 
+let quantityElement = document.getElementsByClassName("cart-row-quantity");
+for(let i = 0; i < quantityElement.length; i++){
+    let input = quantityElement[i];
+    input.addEventListener("change", quantityChanged);
+}
+
+function quantityChanged(event){
+    let input = event.target;
+    if(isNaN(input.value) || input.value <= 0){
+        input.value = 1;
+    }
+    updateCart();
+}
+
 function updateCart(){
     let cartRows = document.getElementsByClassName("cart-row");
     let total = 0;
