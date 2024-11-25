@@ -195,6 +195,20 @@ function quantityChanged(event){
     updateCart();
 }
 
+let addToCartBtns = document.getElementsByClassName("addToCart");
+for(let i = 0; i < addToCartBtns.length; i++){
+    addToCartBtns[i].addEventListener("click", addToCartClicked);
+}
+
+function addToCartClicked(event){
+    let button = event.target;
+    let shopItem = button.parentElement.parentElement;
+    let title = shopItem.getElementsByClassName("single-pro-image")[0].src;
+    let itemName = shopItem.getElementById("shop-name").innerHtml;
+    let itemPrice = shopItem.getElementById("shop-price").innerHtml;
+    console.log(title, itemName, itemPrice);
+}
+
 function updateCart(){
     let cartRows = document.getElementsByClassName("cart-row");
     let total = 0;
@@ -211,8 +225,12 @@ function updateCart(){
     }
     let cartSubTotal = document.getElementById("cart-subtotal");
     let cartTotal = document.getElementById("cart-total");
-    cartSubTotal.textContent = `$${total.toFixed(2)}`;  // Format the total to 2 decimal places
-    cartTotal.textContent = `$${total.toFixed(2)}`;  // Set the same value for the total
+    if(cartSubTotal){
+        cartSubTotal.textContent = `$${total.toFixed(2)}`;  // Format the total to 2 decimal places
+    }
+    if(cartTotal){
+        cartTotal.textContent = `$${total.toFixed(2)}`;  // Set the same value for the total
+    }
 }
 
 updateCart();
