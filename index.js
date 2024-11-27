@@ -203,9 +203,9 @@ for(let i = 0; i < addToCartBtns.length; i++){
 function addToCartClicked(event){
     let button = event.target;
     let shopItem = button.parentElement.parentElement;
-    let title = shopItem.getElementsByClassName("single-pro-image")[0].src;
-    let itemName = shopItem.getElementById("shop-name").innerHtml;
-    let itemPrice = shopItem.getElementById("shop-price").innerHtml;
+    let title = shopItem.querySelector(".single-pro-image img").src;
+    let itemName = shopItem.querySelector("#shop-name").innerText;
+    let itemPrice = shopItem.querySelector("#shop-price").innerText;
     console.log(title, itemName, itemPrice);
 }
 
