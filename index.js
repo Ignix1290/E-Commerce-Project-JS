@@ -130,19 +130,19 @@ const shop = [
     }
 ];
 
-
-//sproduct function
-function sproductFunction(event){
+// sproduct function
+function sproductFunction(event) {
     window.location.href = "sproduct.html";
 }
 
-let MainImg = document.getElementById("MainImg");
 let shopImg = document.getElementsByClassName("shopImg");
 
-for(let i = 0; i < shopImg.length; i++){
-    shopImg[i].addEventListener("click", function(){
+// Add event listeners to each shop item
+for (let i = 0; i < shopImg.length; i++) {
+    shopImg[i].addEventListener("click", function () {
         const selectedShopItem = shop[i];
 
+        // Store selected item details in session storage
         sessionStorage.setItem("selectedImg", selectedShopItem.image);
         sessionStorage.setItem("selectedBrand", selectedShopItem.brand);
         sessionStorage.setItem("selectedName", selectedShopItem.name);
@@ -150,25 +150,29 @@ for(let i = 0; i < shopImg.length; i++){
     });
 }
 
-let selectedImg = sessionStorage.getItem("selectedImg");
+// Retrieve data from session storage for sproduct page
+let MainImg = document.querySelector(".MainImg");
 let selectedBrand = document.getElementById("shop-brand");
-let selectedName = document.getElementById("shop-name");
-let selectedPrice = document.getElementById("shop-price");
+let selectedName = document.querySelector(".shop-name");
+let selectedPrice = document.querySelector(".shop-price");
 
-// console.log("Retrieved from sessionStorage:", selectedImg, selectedBrand, selectedName, selectedPrice);
+// Update content if elements exist
+if (MainImg) {
+    MainImg.src = sessionStorage.getItem("selectedImg") || "";
+}
 
-if (MainImg && selectedImg) {
-    MainImg.src = selectedImg;
+if (selectedBrand) {
+    selectedBrand.textContent = sessionStorage.getItem("selectedBrand") || "Brand";
 }
-if(selectedBrand){
-    selectedBrand.textContent = sessionStorage.getItem("selectedBrand");
+
+if (selectedName) {
+    selectedName.textContent = sessionStorage.getItem("selectedName") || "Product Name";
 }
-if(selectedName){
-    selectedName.textContent = sessionStorage.getItem("selectedName");
+
+if (selectedPrice) {
+    selectedPrice.textContent = `$${sessionStorage.getItem("selectedPrice") || "0.00"}`;
 }
-if(selectedPrice){
-    selectedPrice.textContent = "$" + sessionStorage.getItem("selectedPrice");
-}
+
 
 
 //Cart Functionality
@@ -204,10 +208,15 @@ function addToCartClicked(event){
     let button = event.target;
     let shopItem = button.parentElement.parentElement;
     let title = shopItem.querySelector(".single-pro-image img").src;
-    let itemName = shopItem.querySelector("#shop-name").innerText;
-    let itemPrice = shopItem.querySelector("#shop-price").innerText;
+    let itemName = shopItem.querySelector(".shop-name").innerText;
+    let itemPrice = shopItem.querySelector(".shop-price").innerText;
     console.log(title, itemName, itemPrice);
 }
+
+let cartIcons = document.querySelectorAll(".bx bxs-cart-add cart");
+cartIcons.forEach((button) =>{
+    button.addEventListener("click", addToCartClicked);
+})
 
 function updateCart(){
     let cartRows = document.getElementsByClassName("cart-row");
