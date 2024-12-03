@@ -173,8 +173,6 @@ if (selectedPrice) {
     selectedPrice.textContent = `$${sessionStorage.getItem("selectedPrice") || "0.00"}`;
 }
 
-
-
 //Cart Functionality
 let remove_from_cart = document.getElementsByClassName("remove-from-cart");
 for(let i = 0; i < remove_from_cart.length; i++){
@@ -199,24 +197,48 @@ function quantityChanged(event){
     updateCart();
 }
 
-let addToCartBtns = document.getElementsByClassName("addToCart");
-for(let i = 0; i < addToCartBtns.length; i++){
-    addToCartBtns[i].addEventListener("click", addToCartClicked);
-}
+// Cart Array
+cartItems = [];
 
-function addToCartClicked(event){
-    let button = event.target;
-    let shopItem = button.parentElement.parentElement;
-    let title = shopItem.querySelector(".single-pro-image img").src;
-    let itemName = shopItem.querySelector(".shop-name").innerText;
-    let itemPrice = shopItem.querySelector(".shop-price").innerText;
-    console.log(title, itemName, itemPrice);
-}
+document.querySelectorAll(".addToCart").forEach((cartLink) => {
+    cartLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        
+        const product = cartLink.closest(".pro");  // Get the closest .pro element
+        console.log(product);
+        
+        if (product) {
+            console.log('Product container:', product);  // Check the entire product container
+        
+            const productName = product.querySelector(".shop-name")?.textContent.trim();
+            console.log('Product Name:', productName);  // Check if productName is selected
+        
+            const productPrice = product.querySelector(".shop-price")?.textContent.trim();
+            console.log('Product Price:', productPrice);  // Check if productPrice is selected
+        
+            const productImage = product.querySelector(".shopImg")?.src;
+            console.log('Product Image:', productImage);  // Check if productImage is selected
+        
+            if (productName && productPrice && productImage) {
+                console.log(`Product added: ${productName}, Price: ${productPrice}, Image: ${productImage}`);
+                const productDetails = {
+                    name: productName,
+                    price: productPrice,
+                    image: productImage,
+                };
+                cartItems.push(productDetails);
+                console.log("cart items:", cartItems);
+            } else {
+                console.error('Product details are missing.');
+            }
+        } else {
+            console.error('Product container not found.');
+        }
+        
+    });
+});
 
-let cartIcons = document.querySelectorAll(".bx bxs-cart-add cart");
-cartIcons.forEach((button) =>{
-    button.addEventListener("click", addToCartClicked);
-})
+
 
 function updateCart(){
     let cartRows = document.getElementsByClassName("cart-row");
