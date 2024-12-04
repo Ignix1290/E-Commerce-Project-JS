@@ -198,45 +198,51 @@ function quantityChanged(event){
 }
 
 // Cart Array
-cartItems = [];
+let cartItems = [];
 
-document.querySelectorAll(".addToCart").forEach((cartLink) => {
-    cartLink.addEventListener("click", (event) => {
-        event.preventDefault();
-        
-        const product = cartLink.closest(".pro");  // Get the closest .pro element
-        console.log(product);
-        
-        if (product) {
-            console.log('Product container:', product);  // Check the entire product container
-        
-            const productName = product.querySelector(".shop-name")?.textContent.trim();
-            console.log('Product Name:', productName);  // Check if productName is selected
-        
-            const productPrice = product.querySelector(".shop-price")?.textContent.trim();
-            console.log('Product Price:', productPrice);  // Check if productPrice is selected
-        
-            const productImage = product.querySelector(".shopImg")?.src;
-            console.log('Product Image:', productImage);  // Check if productImage is selected
-        
-            if (productName && productPrice && productImage) {
-                console.log(`Product added: ${productName}, Price: ${productPrice}, Image: ${productImage}`);
-                const productDetails = {
-                    name: productName,
-                    price: productPrice,
-                    image: productImage,
-                };
-                cartItems.push(productDetails);
-                console.log("cart items:", cartItems);
-            } else {
-                console.error('Product details are missing.');
-            }
-        } else {
-            console.error('Product container not found.');
-        }
-        
-    });
+// Function to handle Add to Cart
+function handleAddToCart(event) {
+    event.preventDefault();
+
+    // Identify the container for the product details
+    let product, productName, productPrice, productImage;
+
+    if (event.target.closest("#prodetails")) {
+        // sproduct page structure
+        product = event.target.closest("#prodetails");
+        productName = product.querySelector(".shop-name")?.textContent.trim();
+        productPrice = product.querySelector(".shop-price")?.textContent.trim();
+        productImage = product.querySelector(".MainImg")?.src;
+    } else if (event.target.closest(".pro")) {
+        // shop page structure
+        product = event.target.closest(".pro");
+        productName = product.querySelector(".shop-name")?.textContent.trim();
+        productPrice = product.querySelector(".shop-price")?.textContent.trim();
+        productImage = product.querySelector(".shopImg")?.src;
+    }
+
+    // Check if we have all the product details
+    if (productName && productPrice && productImage) {
+        console.log(`Product added: ${productName}, Price: ${productPrice}, Image: ${productImage}`);
+
+        const productDetails = {
+            name: productName,
+            price: productPrice,
+            image: productImage,
+        };
+
+        cartItems.push(productDetails);
+        console.log("Cart items:", cartItems);
+    } else {
+        console.error("Product details are missing.");
+    }
+}
+
+// Attach event listeners
+document.querySelectorAll(".addToCart").forEach((cartButton) => {
+    cartButton.addEventListener("click", handleAddToCart);
 });
+
 
 
 
