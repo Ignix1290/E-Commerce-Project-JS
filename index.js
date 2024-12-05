@@ -198,7 +198,7 @@ function quantityChanged(event){
 }
 
 // Cart Array
-let cartItems = [];
+let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
 
 // Function to handle Add to Cart
 function handleAddToCart(event) {
@@ -232,6 +232,9 @@ function handleAddToCart(event) {
         };
 
         cartItems.push(productDetails);
+
+        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
         console.log("Cart items:", cartItems);
     } else {
         console.error("Product details are missing.");
@@ -243,8 +246,15 @@ document.querySelectorAll(".addToCart").forEach((cartButton) => {
     cartButton.addEventListener("click", handleAddToCart);
 });
 
+function loadCartFromLocalStorge(){
+    const storedCartItems = JSON.parse(localStorage.getItem("cartItems"));
+    if(storedCartItems){
+        cartItems = storedCartItems;
+        console.log("cart loaded from localStorage:", cartItems);
+    }
+}
 
-
+loadCartFromLocalStorge();
 
 function updateCart(){
     let cartRows = document.getElementsByClassName("cart-row");
