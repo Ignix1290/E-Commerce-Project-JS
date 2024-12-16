@@ -974,6 +974,65 @@ footer .copyright{
     padding: 40px;
 }
 
+/* Checkout Page */
+.checkout-heading{
+    font-size: 21px;
+    font-weight: bold;
+    color: black;
+}
+
+#checkout-details{
+    background-color: #E3E6F3;
+    width: 50%;
+    padding: 15px 22px;
+    margin: 2% 15%;
+}
+
+#payment{
+    background-color: #E3E6F3;
+    width: 50%;
+    padding: 15px 22px;
+    margin: 2% 15%;
+}
+
+#checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#checkout-form div {
+    display: flex; 
+    align-items: center;
+    gap: 10px;
+}
+
+#checkout-form label {
+    width: 150px;
+    text-align: right;
+}
+
+#checkout-form input,
+#checkout-form textarea {
+    height: 25px;
+    width: 60%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    box-sizing: border-box;
+}
+
+#checkout-form textarea {
+    height: 60px;
+}
+
+
+#payment-options{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 /* Start Media Query */
 @media (max-width:799px){
     .div-p1{

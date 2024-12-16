@@ -28,16 +28,51 @@
         </div>
     </div>
 
-    <div id="address">
-        <h1>Delivering to Samuel Lakra</h1>
+    <div id="checkout-details">
+        <p class="checkout-heading">Delivering to</p>
+
+        <form id="checkout-form">
+            <div>
+                <label>Name : </label>
+                <input placeholder="Enter your name" type="text">
+            </div>
+            <div>
+                <label>Email : </label>
+                <input placeholder="Enter your Email" type="text">
+            </div>
+            
+            <div>
+                <label>Number : </label>
+                <input placeholder="Enter your phone number" type="text">
+            </div>
+            <div>
+                <label>Address : </label>
+                <textarea placeholder="Enter your Address" type="text"></textarea>
+            </div>  
+        </form>
     </div>
 
     <div id="payment">
-        <h1>Payment Options</h1>
+        <p class="checkout-heading">Payment Options</p>
+
+        <div id="payment-options">
+            <div>
+                <input name="payment" type="radio">
+                <label>Credit or Debit Cards</label>
+            </div>
+            <div>
+                <input name="payment" type="radio">
+                <label>UPI</label>
+            </div>
+            <div>
+                <input name="payment" type="radio">
+                <label>Cash on delivery</label>
+            </div>
+        </div>
     </div>
 
     <div id="order-total">
-        <h1>Order Total</h1>
+        <p class="checkout-heading">Order Total</p>
     </div>
 
     <footer class="div-p1">
