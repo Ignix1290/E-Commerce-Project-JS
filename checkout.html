@@ -60,13 +60,33 @@
                 <input name="payment" type="radio">
                 <label>Credit or Debit Cards</label>
             </div>
+            <div id="card-form">
+                <div>
+                    <label>Card number</label>
+                    <input type="number">
+                </div>
+                <div>
+                    <label>Nickname</label>
+                    <input type="text">
+                </div>
+                <div>
+                    <label>Expiry date</label>
+                    <input type="date">
+                </div>
+            </div>
             <div>
                 <input name="payment" type="radio">
                 <label>UPI</label>
             </div>
-            <div>
+            <div id="upi-form">
+                <label>Please enter your UPI ID</label>
+                <input type="email">
+                <label>The UPI ID is in the format of name/phone number@bankname</label>
+            </div>
+            <div id="cash-on-delivery">
                 <input name="payment" type="radio">
                 <label>Cash on delivery</label>
+                <p>Convenience fee of ₹10 will apply. To avoid this fee, use any other payment method.</p>
             </div>
         </div>
     </div>

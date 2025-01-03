@@ -1019,19 +1019,76 @@ footer .copyright{
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 4px 8px;
-    box-sizing: border-box;
 }
 
 #checkout-form textarea {
     height: 60px;
 }
 
-
 #payment-options{
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
+
+#card-form{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-left: 30px;
+}
+
+#card-form div {
+    display: flex; 
+    align-items: center;
+    gap: 10px;
+}
+
+#card-form label{
+    width: 100px;
+    text-align: left;
+}
+
+#card-form input{
+    border: 1px solid #ccc;
+    height: 20px;
+}
+
+#upi-form{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-left: 30px;
+}
+
+#upi-form input{
+    border: 1px solid #ccc;
+    height: 20px;
+    width: 25%;
+}
+
+#cash-on-delivery p{
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-left: 30px;
+    color: black;
+}
+
+#order-total {
+    position: fixed;
+    top: 114px;
+    right: 360px;
+    background-color: #E3E6F3;
+    padding: 15px;
+}
+
 
 /* Start Media Query */
 @media (max-width:799px){
