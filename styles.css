@@ -1084,11 +1084,38 @@ footer .copyright{
 #order-total {
     position: fixed;
     top: 114px;
-    right: 360px;
+    right: 280px;
     background-color: #E3E6F3;
     padding: 15px;
 }
 
+#order-total button{
+    background-color: #088178;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+#order-total button:hover{
+    background-color: #086f69;
+}
+
+.order-total{
+    font-size: 21px;
+    font-weight: bold;
+    color: black;
+}
+
+#order-total-details p{
+    color: black;
+}
+
+#order-total-details{
+    border-top: 1px solid white;
+    margin-top: 20px;
+}
 
 /* Start Media Query */
 @media (max-width:799px){
