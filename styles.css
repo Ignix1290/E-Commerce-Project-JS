@@ -1073,7 +1073,7 @@ footer .copyright{
     width: 25%;
 }
 
-#cash-on-delivery p{
+#cash-on-delivery-details p{
     border: 1px solid white;
     border-radius: 10px;
     padding: 15px;
@@ -1102,7 +1102,7 @@ footer .copyright{
     background-color: #086f69;
 }
 
-.order-total{
+#order-total-price{
     font-size: 21px;
     font-weight: bold;
     color: black;
@@ -1115,6 +1115,10 @@ footer .copyright{
 #order-total-details{
     border-top: 1px solid white;
     margin-top: 20px;
+}
+
+#card-form, #upi-form, #cash-on-delivery-details {
+    display: none;
 }
 
 /* Start Media Query */

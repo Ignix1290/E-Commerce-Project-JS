@@ -267,6 +267,7 @@ function renderCart() {
     // Rebind remove and quantity change functions
     attachEventListeners();
     updateCart();
+    updateOrderSummary();
 }
 
 
@@ -315,6 +316,7 @@ function quantityChanged(event, itemId) {
 
     // Recalculate cart totals
     updateCart();
+    updateOrderSummary();
 }
 
 // Function to update cart totals (subtotal, total)
@@ -358,3 +360,89 @@ document.querySelectorAll('.addToCart').forEach(button => {
 
 console.log("Cart items after addition:", cartItems);
 
+// Checkout Page radio functionality
+document.addEventListener("DOMContentLoaded", () => {
+    const paymentOptions = document.querySelectorAll("input[name='payment']");
+    const cardForm = document.getElementById("card-form");
+    const upiForm = document.getElementById("upi-form");
+    const codDetails = document.getElementById("cash-on-delivery-details");
+
+    const hideAllDetails = () => {
+        if (cardForm) cardForm.style.display = "none";
+        if (upiForm) upiForm.style.display = "none";
+        if (codDetails) codDetails.style.display = "none";
+    };    
+
+    paymentOptions.forEach(option => {
+        option.addEventListener("change", () => {
+            hideAllDetails(); // Hide all details initially
+
+            // Show the relevant details based on selected option
+            if (option.id === "Credit or Debit Cards") {
+                cardForm.style.display = "flex";
+            } else if (option.id === "UPI") {
+                upiForm.style.display = "flex";
+            } else if (option.id === "Cash on delivery") {
+                codDetails.style.display = "block";
+            }
+        });
+    });
+
+    hideAllDetails(); // Initially hide all details
+});
+
+// Calculate total quantity of items in cart
+function getTotalQuantity() {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+}
+
+// Calculate delivery fee based on payment method
+function getDeliveryFee() {
+    const codOption = document.querySelector('input[name="payment"][id="Cash on delivery"]');  // Correct ID selector
+    return codOption && codOption.checked ? 5 : 0;  // $5 if COD is selected, otherwise $0
+}
+
+
+// Calculate the total order price including delivery fee
+function getOrderTotal() {
+    let totalPrice = 0;
+
+    cartItems.forEach(item => {
+        totalPrice += item.price * item.quantity;
+    });
+
+    totalPrice += getDeliveryFee();  // Add delivery fee if applicable
+    return totalPrice;
+}
+
+// Update the order summary UI
+const updateOrderSummary = () => {
+    // Update total quantity
+    const totalQuantityElement = document.getElementById('total-quantity');
+    if (totalQuantityElement) {
+        totalQuantityElement.textContent = getTotalQuantity();
+    }
+
+    // Update delivery fee
+    const deliveryFeeElement = document.getElementById('delivery-fee');
+    if (deliveryFeeElement) {
+        deliveryFeeElement.textContent = `$${getDeliveryFee()}`;
+    }
+
+    // Update order total
+    const orderTotalElement = document.getElementById('order-total-price');
+    if (orderTotalElement) {
+        orderTotalElement.textContent = `$${getOrderTotal().toFixed(2)}`;
+    }
+};
+
+document.querySelectorAll("input[name='payment']").forEach(option => {
+    option.addEventListener("change", () => {
+        updateOrderSummary();  // Update the order summary when payment method changes
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Initialize the order summary as soon as the page loads
+    updateOrderSummary();
+});

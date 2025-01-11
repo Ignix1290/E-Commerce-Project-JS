@@ -57,7 +57,7 @@
 
         <div id="payment-options">
             <div>
-                <input name="payment" type="radio">
+                <input name="payment" type="radio" id="Credit or Debit Cards">
                 <label>Credit or Debit Cards</label>
             </div>
             <div id="card-form">
@@ -75,7 +75,7 @@
                 </div>
             </div>
             <div>
-                <input name="payment" type="radio">
+                <input name="payment" type="radio" id="UPI">
                 <label>UPI</label>
             </div>
             <div id="upi-form">
@@ -84,19 +84,21 @@
                 <label>The UPI ID is in the format of name/phone number@bankname</label>
             </div>
             <div id="cash-on-delivery">
-                <input name="payment" type="radio">
+                <input name="payment" type="radio" id="Cash on delivery">
                 <label>Cash on delivery</label>
+            </div>
+            <div id="cash-on-delivery-details">
                 <p>Convenience fee of $5 will apply. To avoid this fee, use any other payment method.</p>
             </div>
         </div>
     </div>
 
     <div id="order-total">
-        <button>Use this payment methodd</button>
+        <button>Use this payment method</button>
         <div id="order-total-details">
-            <p>Items : 0</p>
-            <p>Delivery : $0</p>
-            <p class="order-total">Order Total : $0</p>
+            <p>Total Items: <span id="total-quantity">0</span></p>
+            <p>Delivery Fee: <span id="delivery-fee">$0</span></p>
+            <p>Order Total: <span id="order-total-price">$0</span></p>
         </div>
     </div>
 
