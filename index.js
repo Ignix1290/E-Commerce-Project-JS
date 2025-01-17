@@ -459,9 +459,10 @@ function closeOrderConfirmation() {
     modal.style.display = 'none'; // Hide the modal
 }
 
-// Function to empty the cart
+// Function to empty the cart and clear from localStorage
 function emptyCart() {
     cartItems = []; // Empty the cart array
+    localStorage.setItem('cartItems', JSON.stringify(cartItems)); // Clear the cart in localStorage
     renderCart(); // Re-render the cart (this should clear the cart in the UI)
     updateOrderSummary(); // Update order summary to show empty cart values
 }
@@ -474,3 +475,17 @@ document.querySelector('#order-total button').addEventListener('click', () => {
 
 // Add event listener to close the modal
 document.querySelector('#close-modal').addEventListener('click', closeOrderConfirmation);
+
+// Load cart from localStorage
+function loadCartFromStorage() {
+    const storedCart = JSON.parse(localStorage.getItem('cartItems'));
+    if (storedCart && Array.isArray(storedCart)) {
+        cartItems = storedCart;
+        renderCart(); // Re-render cart with items from localStorage
+        updateOrderSummary(); // Update the order summary
+    }
+}
+
+// Run this when the page loads
+loadCartFromStorage();
+
