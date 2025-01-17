@@ -446,3 +446,31 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize the order summary as soon as the page loads
     updateOrderSummary();
 });
+
+// Function to show modal
+function showOrderConfirmation() {
+    const modal = document.getElementById('order-modal');
+    modal.style.display = 'flex'; // Show the modal
+}
+
+// Function to close the modal
+function closeOrderConfirmation() {
+    const modal = document.getElementById('order-modal');
+    modal.style.display = 'none'; // Hide the modal
+}
+
+// Function to empty the cart
+function emptyCart() {
+    cartItems = []; // Empty the cart array
+    renderCart(); // Re-render the cart (this should clear the cart in the UI)
+    updateOrderSummary(); // Update order summary to show empty cart values
+}
+
+// Add event listener to the button
+document.querySelector('#order-total button').addEventListener('click', () => {
+    showOrderConfirmation();  // Show the confirmation modal
+    emptyCart();               // Empty the cart
+});
+
+// Add event listener to close the modal
+document.querySelector('#close-modal').addEventListener('click', closeOrderConfirmation);
