@@ -358,26 +358,52 @@ document.querySelectorAll('.addToCart').forEach(button => {
     button.addEventListener('click', handleAddToCart);
 });
 
+document.getElementById('checkout-btn').addEventListener('click', function(event) {
+    // Load the cart from localStorage
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+    // Check if the cart is empty
+    if (cartItems.length === 0) {
+        alert("Your cart is empty. Please add items before proceeding to checkout.");
+    } else {
+        // Proceed to checkout if the cart is not empty
+        window.location.href = 'checkout.html';
+    }
+});
+
 console.log("Cart items after addition:", cartItems);
 
 // Checkout Page radio functionality
 document.addEventListener("DOMContentLoaded", () => {
+
     const paymentOptions = document.querySelectorAll("input[name='payment']");
     const cardForm = document.getElementById("card-form");
     const upiForm = document.getElementById("upi-form");
     const codDetails = document.getElementById("cash-on-delivery-details");
 
+    // Ensure the modal and form elements are found
+    const checkoutButton = document.querySelector("#order-total button");
+    const checkoutForm = document.getElementById("checkout-form");
+    const orderModal = document.getElementById("order-modal");
+    const closeModal = document.getElementById("close-modal");
+
+    // Validate existence of necessary elements
+    if (!checkoutButton || !checkoutForm || !orderModal || !closeModal) {
+        console.error("One or more required elements are missing from the DOM");
+        return;
+    }
+
+    // Hide all details for the payment options initially
     const hideAllDetails = () => {
         if (cardForm) cardForm.style.display = "none";
         if (upiForm) upiForm.style.display = "none";
         if (codDetails) codDetails.style.display = "none";
-    };    
+    };
 
+    // Add event listener to payment option changes
     paymentOptions.forEach(option => {
         option.addEventListener("change", () => {
-            hideAllDetails(); // Hide all details initially
-
-            // Show the relevant details based on selected option
+            hideAllDetails();
             if (option.id === "Credit or Debit Cards") {
                 cardForm.style.display = "flex";
             } else if (option.id === "UPI") {
@@ -389,103 +415,135 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     hideAllDetails(); // Initially hide all details
-});
 
-// Calculate total quantity of items in cart
-function getTotalQuantity() {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
-}
+    // Cart and order summary logic
+    function getTotalQuantity() {
+        return cartItems.reduce((total, item) => total + item.quantity, 0);
+    }
 
-// Calculate delivery fee based on payment method
-function getDeliveryFee() {
-    const codOption = document.querySelector('input[name="payment"][id="Cash on delivery"]');  // Correct ID selector
-    return codOption && codOption.checked ? 5 : 0;  // $5 if COD is selected, otherwise $0
-}
+    function getDeliveryFee() {
+        const codOption = document.querySelector('input[name="payment"][id="Cash on delivery"]');
+        return codOption && codOption.checked ? 5 : 0;
+    }
 
+    function getOrderTotal() {
+        let totalPrice = 0;
+        cartItems.forEach(item => {
+            totalPrice += item.price * item.quantity;
+        });
+        totalPrice += getDeliveryFee();
+        return totalPrice;
+    }
 
-// Calculate the total order price including delivery fee
-function getOrderTotal() {
-    let totalPrice = 0;
+    const updateOrderSummary = () => {
+        const totalQuantityElement = document.getElementById('total-quantity');
+        if (totalQuantityElement) {
+            totalQuantityElement.textContent = getTotalQuantity();
+        }
 
-    cartItems.forEach(item => {
-        totalPrice += item.price * item.quantity;
+        const deliveryFeeElement = document.getElementById('delivery-fee');
+        if (deliveryFeeElement) {
+            deliveryFeeElement.textContent = `$${getDeliveryFee()}`;
+        }
+
+        const orderTotalElement = document.getElementById('order-total-price');
+        if (orderTotalElement) {
+            orderTotalElement.textContent = `$${getOrderTotal().toFixed(2)}`;
+        }
+    };
+
+    // Update order summary on payment method change
+    paymentOptions.forEach(option => {
+        option.addEventListener("change", updateOrderSummary);
     });
 
-    totalPrice += getDeliveryFee();  // Add delivery fee if applicable
-    return totalPrice;
-}
-
-// Update the order summary UI
-const updateOrderSummary = () => {
-    // Update total quantity
-    const totalQuantityElement = document.getElementById('total-quantity');
-    if (totalQuantityElement) {
-        totalQuantityElement.textContent = getTotalQuantity();
-    }
-
-    // Update delivery fee
-    const deliveryFeeElement = document.getElementById('delivery-fee');
-    if (deliveryFeeElement) {
-        deliveryFeeElement.textContent = `$${getDeliveryFee()}`;
-    }
-
-    // Update order total
-    const orderTotalElement = document.getElementById('order-total-price');
-    if (orderTotalElement) {
-        orderTotalElement.textContent = `$${getOrderTotal().toFixed(2)}`;
-    }
-};
-
-document.querySelectorAll("input[name='payment']").forEach(option => {
-    option.addEventListener("change", () => {
-        updateOrderSummary();  // Update the order summary when payment method changes
-    });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-    // Initialize the order summary as soon as the page loads
+    // Initialize the order summary
     updateOrderSummary();
-});
 
-// Function to show modal
-function showOrderConfirmation() {
-    const modal = document.getElementById('order-modal');
-    modal.style.display = 'flex'; // Show the modal
-}
+    // Checkout button validation
+    // Validate the checkout form
+    const validateForm = () => {
+        const inputs = checkoutForm.querySelectorAll("input, textarea");
+        
+        // Loop through each input to check if all fields are filled
+        for (let input of inputs) {
+            if (!input.value.trim()) {
+                alert(`Please fill out the ${input.placeholder || "required"} field.`);
+                input.focus(); // Focus on the invalid field
+                return false; // Stop validation if a field is empty
+            }
+        }
+    
+        // Ensure a payment method is selected
+        const selectedPayment = document.querySelector("input[name='payment']:checked");
+        if (!selectedPayment) {
+            alert("Please select a payment method.");
+            return false; // Stop validation if no payment method is selected
+        }
+    
+        // Validate payment details based on selected payment method
+        if (selectedPayment.id === "Credit or Debit Cards") {
+            const cardNumber = document.getElementById("card-number");
+            const expiryDate = document.getElementById("expiry-date");
+            const cvv = document.getElementById("cvv");
+            
+            // Ensure fields exist and are not empty
+            if (!(cardNumber && cardNumber.value.trim())) {
+                alert("Please fill out the card number.");
+                return false;
+            }
+            if (!(expiryDate && expiryDate.value.trim())) {
+                alert("Please fill out the expiry date.");
+                return false;
+            }
+            if (!(cvv && cvv.value.trim())) {
+                alert("Please fill out the CVV.");
+                return false;
+            }
+        }
+    
+        if (selectedPayment.id === "UPI") {
+            const upiId = document.getElementById("upi-id");
+            
+            // Ensure the field exists and is not empty
+            if (!(upiId && upiId.value.trim())) {
+                alert("Please fill out your UPI ID.");
+                return false;
+            }
+        }
+    
+        return true; // All fields are valid
+    };
 
-// Function to close the modal
-function closeOrderConfirmation() {
-    const modal = document.getElementById('order-modal');
-    modal.style.display = 'none'; // Hide the modal
-}
+    // Handle checkout button click
+    checkoutButton.addEventListener("click", (event) => {
+        if (!validateForm()) {
+            event.preventDefault();
+            return;
+        }
 
-// Function to empty the cart and clear from localStorage
-function emptyCart() {
-    cartItems = []; // Empty the cart array
-    localStorage.setItem('cartItems', JSON.stringify(cartItems)); // Clear the cart in localStorage
-    renderCart(); // Re-render the cart (this should clear the cart in the UI)
-    updateOrderSummary(); // Update order summary to show empty cart values
-}
+        // Only show modal if the form is valid
+        orderModal.style.display = "block";
 
-// Add event listener to the button
-document.querySelector('#order-total button').addEventListener('click', () => {
-    showOrderConfirmation();  // Show the confirmation modal
-    emptyCart();               // Empty the cart
-});
+        // Optionally clear cart from localStorage
+        localStorage.removeItem("cartItems");
+    });
 
-// Add event listener to close the modal
-document.querySelector('#close-modal').addEventListener('click', closeOrderConfirmation);
+    // Close modal and redirect
+    closeModal.addEventListener("click", () => {
+        window.location.href = "index.html"; // Adjust path if necessary
+    });
 
-// Load cart from localStorage
-function loadCartFromStorage() {
-    const storedCart = JSON.parse(localStorage.getItem('cartItems'));
-    if (storedCart && Array.isArray(storedCart)) {
-        cartItems = storedCart;
-        renderCart(); // Re-render cart with items from localStorage
-        updateOrderSummary(); // Update the order summary
+    // Load cart from localStorage
+    function loadCartFromStorage() {
+        const storedCart = JSON.parse(localStorage.getItem('cartItems'));
+        if (storedCart && Array.isArray(storedCart)) {
+            cartItems = storedCart;
+            renderCart();
+            updateOrderSummary();
+        }
     }
-}
 
-// Run this when the page loads
-loadCartFromStorage();
-
+    // Call on page load
+    loadCartFromStorage();
+});
