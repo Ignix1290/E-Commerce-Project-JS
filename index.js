@@ -358,136 +358,139 @@ document.querySelectorAll('.addToCart').forEach(button => {
     button.addEventListener('click', handleAddToCart);
 });
 
-document.getElementById('checkout-btn').addEventListener('click', function(event) {
-    // Load the cart from localStorage
-    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+document.addEventListener('DOMContentLoaded', () => {
+    const checkoutButton = document.getElementById('checkout-btn');
 
-    // Check if the cart is empty
-    if (cartItems.length === 0) {
-        alert("Your cart is empty. Please add items before proceeding to checkout.");
-    } else {
-        // Proceed to checkout if the cart is not empty
-        window.location.href = 'checkout.html';
+    if (checkoutButton) {
+        // Add event listener only if the button exists
+        checkoutButton.addEventListener('click', function (event) {
+            const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            if (cartItems.length === 0) {
+                alert("Your cart is empty. Please add items before proceeding to checkout.");
+            } else {
+                window.location.href = 'checkout.html';
+            }
+        });
     }
 });
+
+const updateOrderSummary = () => {
+    const totalQuantityElement = document.getElementById('total-quantity');
+    if (totalQuantityElement) {
+        totalQuantityElement.textContent = getTotalQuantity();
+    }
+
+    const deliveryFeeElement = document.getElementById('delivery-fee');
+    if (deliveryFeeElement) {
+        deliveryFeeElement.textContent = `$${getDeliveryFee()}`;
+    }
+
+    const orderTotalElement = document.getElementById('order-total-price');
+    if (orderTotalElement) {
+        orderTotalElement.textContent = `$${getOrderTotal().toFixed(2)}`;
+    }
+};
+
+// Helper functions
+function getTotalQuantity() {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+}
+
+function getDeliveryFee() {
+    const codOption = document.querySelector('input[name="payment"][id="Cash on delivery"]');
+    return codOption && codOption.checked ? 5 : 0;
+}
+
+function getOrderTotal() {
+    let totalPrice = 0;
+    cartItems.forEach(item => {
+        totalPrice += item.price * item.quantity;
+    });
+    totalPrice += getDeliveryFee();
+    return totalPrice;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Assuming cartItems is loaded and available for the checkout page
+    updateOrderSummary();  // Call this to update the prices on the checkout page
+});
+
 
 console.log("Cart items after addition:", cartItems);
 
 // Checkout Page radio functionality
 document.addEventListener("DOMContentLoaded", () => {
-
-    const paymentOptions = document.querySelectorAll("input[name='payment']");
-    const cardForm = document.getElementById("card-form");
-    const upiForm = document.getElementById("upi-form");
-    const codDetails = document.getElementById("cash-on-delivery-details");
-
-    // Ensure the modal and form elements are found
+    // Identify elements
     const checkoutButton = document.querySelector("#order-total button");
     const checkoutForm = document.getElementById("checkout-form");
     const orderModal = document.getElementById("order-modal");
     const closeModal = document.getElementById("close-modal");
 
-    // Validate existence of necessary elements
+    // Payment forms
+    const cardForm = document.getElementById("card-form");
+    const upiForm = document.getElementById("upi-form");
+    const codDetails = document.getElementById("cash-on-delivery-details");
+    const paymentOptions = document.querySelectorAll("input[name='payment']");
+
+    // Check if these elements exist before proceeding
     if (!checkoutButton || !checkoutForm || !orderModal || !closeModal) {
-        console.error("One or more required elements are missing from the DOM");
+        console.warn("Skipping checkout logic: Necessary elements are missing from the DOM.");
         return;
     }
 
-    // Hide all details for the payment options initially
+    // Log to check if the elements are correctly fetched
+    console.log('cardForm:', cardForm);
+    console.log('upiForm:', upiForm);
+    console.log('codDetails:', codDetails);
+
+    // Hide all payment details initially
     const hideAllDetails = () => {
+        // Check if the form elements exist before attempting to access their styles
         if (cardForm) cardForm.style.display = "none";
         if (upiForm) upiForm.style.display = "none";
         if (codDetails) codDetails.style.display = "none";
     };
 
-    // Add event listener to payment option changes
+    // Event listener for payment method change
     paymentOptions.forEach(option => {
         option.addEventListener("change", () => {
+            console.log("Payment option selected:", option.id); // Debugging
             hideAllDetails();
             if (option.id === "Credit or Debit Cards") {
-                cardForm.style.display = "flex";
+                cardForm.style.display = "block";
             } else if (option.id === "UPI") {
-                upiForm.style.display = "flex";
+                upiForm.style.display = "block";
             } else if (option.id === "Cash on delivery") {
                 codDetails.style.display = "block";
             }
+            // Update the order summary based on the selected payment method
+            updateOrderSummary();
         });
     });
 
-    hideAllDetails(); // Initially hide all details
-
-    // Cart and order summary logic
-    function getTotalQuantity() {
-        return cartItems.reduce((total, item) => total + item.quantity, 0);
-    }
-
-    function getDeliveryFee() {
-        const codOption = document.querySelector('input[name="payment"][id="Cash on delivery"]');
-        return codOption && codOption.checked ? 5 : 0;
-    }
-
-    function getOrderTotal() {
-        let totalPrice = 0;
-        cartItems.forEach(item => {
-            totalPrice += item.price * item.quantity;
-        });
-        totalPrice += getDeliveryFee();
-        return totalPrice;
-    }
-
-    const updateOrderSummary = () => {
-        const totalQuantityElement = document.getElementById('total-quantity');
-        if (totalQuantityElement) {
-            totalQuantityElement.textContent = getTotalQuantity();
-        }
-
-        const deliveryFeeElement = document.getElementById('delivery-fee');
-        if (deliveryFeeElement) {
-            deliveryFeeElement.textContent = `$${getDeliveryFee()}`;
-        }
-
-        const orderTotalElement = document.getElementById('order-total-price');
-        if (orderTotalElement) {
-            orderTotalElement.textContent = `$${getOrderTotal().toFixed(2)}`;
-        }
-    };
-
-    // Update order summary on payment method change
-    paymentOptions.forEach(option => {
-        option.addEventListener("change", updateOrderSummary);
-    });
-
-    // Initialize the order summary
-    updateOrderSummary();
-
-    // Checkout button validation
-    // Validate the checkout form
+    // Your existing functionality starts here if elements are found
     const validateForm = () => {
         const inputs = checkoutForm.querySelectorAll("input, textarea");
         
-        // Loop through each input to check if all fields are filled
         for (let input of inputs) {
             if (!input.value.trim()) {
                 alert(`Please fill out the ${input.placeholder || "required"} field.`);
-                input.focus(); // Focus on the invalid field
-                return false; // Stop validation if a field is empty
+                input.focus();
+                return false;
             }
         }
     
-        // Ensure a payment method is selected
         const selectedPayment = document.querySelector("input[name='payment']:checked");
         if (!selectedPayment) {
             alert("Please select a payment method.");
-            return false; // Stop validation if no payment method is selected
+            return false;
         }
     
-        // Validate payment details based on selected payment method
         if (selectedPayment.id === "Credit or Debit Cards") {
             const cardNumber = document.getElementById("card-number");
             const expiryDate = document.getElementById("expiry-date");
             const cvv = document.getElementById("cvv");
             
-            // Ensure fields exist and are not empty
             if (!(cardNumber && cardNumber.value.trim())) {
                 alert("Please fill out the card number.");
                 return false;
@@ -505,45 +508,37 @@ document.addEventListener("DOMContentLoaded", () => {
         if (selectedPayment.id === "UPI") {
             const upiId = document.getElementById("upi-id");
             
-            // Ensure the field exists and is not empty
             if (!(upiId && upiId.value.trim())) {
                 alert("Please fill out your UPI ID.");
                 return false;
             }
         }
     
-        return true; // All fields are valid
+        return true;
     };
 
-    // Handle checkout button click
     checkoutButton.addEventListener("click", (event) => {
         if (!validateForm()) {
             event.preventDefault();
             return;
         }
 
-        // Only show modal if the form is valid
         orderModal.style.display = "block";
-
-        // Optionally clear cart from localStorage
         localStorage.removeItem("cartItems");
     });
 
-    // Close modal and redirect
     closeModal.addEventListener("click", () => {
-        window.location.href = "index.html"; // Adjust path if necessary
+        window.location.href = "index.html";
     });
 
-    // Load cart from localStorage
-    function loadCartFromStorage() {
+    const loadCartFromStorage = () => {
         const storedCart = JSON.parse(localStorage.getItem('cartItems'));
         if (storedCart && Array.isArray(storedCart)) {
             cartItems = storedCart;
             renderCart();
             updateOrderSummary();
         }
-    }
+    };
 
-    // Call on page load
     loadCartFromStorage();
 });
