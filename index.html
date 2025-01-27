@@ -5,13 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ecommerce Js Project</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-    <div id="signin">
+    <!-- <div id="signin">
         <div id="signin-container">
             <button class="normal" onclick="window.location.href = 'home.html'">Sign in</button>
         </div>
-    </div>
+    </div> -->
+
+    <div id="g_id_onload"
+     data-client_id="614843922014-990h9dl1djss2j4pb1halk14neod30bf.apps.googleusercontent.com"
+     data-login_uri="http://localhost:5500"
+     data-callback="handleCredentialResponse"
+     data-auto_prompt="false">
+</div>
+
+<div class="g_id_signin" 
+     data-type="standard"
+     data-shape="rectangular"
+     data-theme="outline"
+     data-text="sign_in_with"
+     data-size="large"
+     data-logo_alignment="left">
+</div>
+
+<button id="google-login-button">Login with Google</button>
     <script src="index.js"></script>
 </body>
 </html>
