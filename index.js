@@ -1,3 +1,32 @@
+//sign up logic
+function signUp(event){
+    event.preventDefault();
+    let email = document.getElementById('email').value;
+    let password = document.getElementById('password').value;
+
+    localStorage.setItem("email", email);
+    localStorage.setItem("password", password);
+
+    window.location.href = "index.html";
+}
+
+//Sign in logic
+function signIn(event){
+    event.preventDefault();
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+
+    let storedEmail = localStorage.getItem("email");
+    let storedPassword = localStorage.getItem("password");
+
+    if(email === storedEmail && password === storedPassword){
+        window.location.href = "home.html";
+    }else{
+        alert("invalid email or password");
+    }
+}
+
+
 const bar = document.getElementById("bar");
 const close = document.getElementById("close");
 const nav = document.getElementById("navbar");
@@ -528,7 +557,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     closeModal.addEventListener("click", () => {
-        window.location.href = "index.html";
+        window.location.href = "home.html";
     });
 
     const loadCartFromStorage = () => {
@@ -543,63 +572,3 @@ document.addEventListener("DOMContentLoaded", () => {
     loadCartFromStorage();
 });
 
-
-//Google login
-function handleCredentialResponse(response) {
-    console.log("Encoded JWT ID token: " + response.credential);
-    // Send the ID token to your backend for verification
-    fetch('http://localhost:3000/api/google-login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token: response.credential }),
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log("Server response:", data);
-        // Handle login success or failure based on backend response
-    })
-    .catch(err => {
-        console.error("Error during login:", err);
-    });
-}
-
-// Load the Google API client
-function initClient() {
-    gapi.client.init({
-      clientId: '614843922014-990h9dl1djss2j4pb1halk14neod30bf.apps.googleusercontent.com',
-      scope: 'profile email'
-    }).then(function () {
-      // Listen for the sign-in state
-      gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-    });
-}
-  
-  // Handle login state change
-function updateSigninStatus(isSignedIn) {
-    if (isSignedIn) {
-      // Logged in, now you can make API calls to fetch user info
-      getUserInfo();
-    } else {
-      // Not logged in
-      console.log("User is not signed in.");
-    }
-}
-  
-  // Handle user info retrieval after login
-function getUserInfo() {
-    var profile = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
-    console.log("Name: " + profile.getName());
-    console.log("Email: " + profile.getEmail());
-    // Do something with user info, like storing it or logging it to the console
-}
-  
-  // Initiate login when button is clicked
-document.getElementById("google-login-button").onclick = function() {
-    gapi.auth2.getAuthInstance().signIn();
-};
-
-gapi.load('client:auth2', initClient);
-
-  

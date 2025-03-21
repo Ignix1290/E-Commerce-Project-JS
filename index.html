@@ -5,33 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ecommerce Js Project</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://apis.google.com/js/api:client.js"></script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-    <!-- <div id="signin">
-        <div id="signin-container">
-            <button class="normal" onclick="window.location.href = 'home.html'">Sign in</button>
-        </div>
-    </div> -->
+    <form>
+        <h1>Sign in</h1>
+        <label for="email">Email</label>
+        <input type="text" id="email" placeholder="Email">
+        <label for="password">Password</label>
+        <input type="text" id="password" placeholder="Password">
+        <button type="button" id="signin" onclick="signIn(event)">Sign in</button>
+    </form>
 
-    <div id="g_id_onload"
-     data-client_id="614843922014-990h9dl1djss2j4pb1halk14neod30bf.apps.googleusercontent.com"
-     data-login_uri="http://localhost:5500"
-     data-callback="handleCredentialResponse"
-     data-auto_prompt="false">
-</div>
+    <a href="signup.html">Create an account</a>
 
-<div class="g_id_signin" 
-     data-type="standard"
-     data-shape="rectangular"
-     data-theme="outline"
-     data-text="sign_in_with"
-     data-size="large"
-     data-logo_alignment="left">
-</div>
+    <!-- Google Sign-In Button -->
+    <button type="button" id="googleSignIn" onclick="googleSignIn()">Sign in with Google</button>
 
-<button id="google-login-button">Login with Google</button>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDbfS8M_kOEFXIi9K9q-UCGB3F7oB3TY4A",
+            authDomain: "e-commerce-js-project.firebaseapp.com",
+            projectId: "e-commerce-js-project",
+            storageBucket: "e-commerce-js-project.firebasestorage.app",
+            messagingSenderId: "72811235378",
+            appId: "1:72811235378:web:aae15d641908baa42c942b"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Sign up with email and password
+        function signUp() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    console.log("User signed up: ", user);
+                })
+                .catch((error) => {
+                    console.error("Error: ", error);
+                });
+        }
+
+        // Sign in with email and password
+        function signIn(event) {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    console.log("User signed in: ", user);
+                })
+                .catch((error) => {
+                    console.error("Error: ", error);
+                });
+        }
+
+        // Google Sign-In
+        window.googleSignIn = function() {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+        .then((result) => {
+            const user = result.user;
+            console.log("User signed in with Google: ", user);
+            // Redirect to another page after successful sign-in
+            window.location.href = "home.html"; // Replace "dashboard.html" with your target page
+        })
+        .catch((error) => {
+            console.error("Error: ", error);
+        });
+};
+    </script>
     <script src="index.js"></script>
 </body>
 </html>
