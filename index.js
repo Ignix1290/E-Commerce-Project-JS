@@ -232,10 +232,10 @@ function handleAddToCart(event) {
             name: productName,
             price: productPrice,
             image: productImage,
-            quantity: 1, // Default quantity is 1
+            quantity: 1, 
         };
 
-        addToCart(productDetails); // Call the function to add the item to the cart
+        addToCart(productDetails); 
     } else {
         console.error("Product details are missing.");
     }
@@ -243,45 +243,45 @@ function handleAddToCart(event) {
 
 // Function to add item to the cart
 function addToCart(item) {
-    console.log("Adding item to cart:", item); // Debugging: Check item being added
+    console.log("Adding item to cart:", item); 
     
     // Check if the item already exists in cartItems array based on image
     let existingItem = cartItems.find(cartItem => cartItem.image === item.image);
 
     if (existingItem) {
-        // If item exists, increase the quantity
+
         existingItem.quantity += 1;
         showCartPopup(`${item.name} quantity updated in cart!`);
-        console.log(`Updated quantity for ${item.name}:`, existingItem.quantity); // Debugging
+        console.log(`Updated quantity for ${item.name}:`, existingItem.quantity); 
     } else {
-        // If item does not exist, push the new item
+  
         cartItems.push(item);
         showCartPopup("Item added to cart!");
-        console.log(`Added new item: ${item.name}`); // Debugging
+        console.log(`Added new item: ${item.name}`); 
     }
 
-    // Save updated cartItems to localStorage
+
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
 
-    renderCart(); // Re-render the cart to reflect updates
+    renderCart(); 
 }
 
 
 // Function to render the cart dynamically
 function renderCart() {
-    console.log("Rendering cart...");  // Debugging: Check if rendering happens
+    console.log("Rendering cart...");
     
-    // Check if cartTableBody exists on the page (only exists on cart page)
-    let cartTableBody = document.querySelector("#cart tbody");
-    if (!cartTableBody) return;  // Exit if the cart is not present on the page
 
-    cartTableBody.innerHTML = "";  // Clear current rows
+    let cartTableBody = document.querySelector("#cart tbody");
+    if (!cartTableBody) return;
+
+    cartTableBody.innerHTML = "";
 
     // Render each item in the cart
     cartItems.forEach(item => {
         let row = document.createElement("tr");
         row.classList.add("cart-row");
-        row.dataset.productId = item.id;  // Set the product ID here for later reference
+        row.dataset.productId = item.id;
 
         row.innerHTML = `
             <td><i class='bx bx-x-circle remove-from-cart'></i></td>
@@ -295,7 +295,6 @@ function renderCart() {
         cartTableBody.appendChild(row);
     });
 
-    // Rebind remove and quantity change functions
     attachEventListeners();
     updateCart();
     updateOrderSummary();
@@ -308,8 +307,8 @@ function attachEventListeners() {
     const removeButtons = document.getElementsByClassName("remove-from-cart");
     for (let i = 0; i < removeButtons.length; i++) {
         removeButtons[i].addEventListener("click", function (event) {
-            const itemImage = event.target.closest("tr").querySelector("img").src; // Get image src
-            console.log("Removing item with Image Src:", itemImage); // Debugging
+            const itemImage = event.target.closest("tr").querySelector("img").src; 
+            console.log("Removing item with Image Src:", itemImage); 
             removeFromCart(itemImage);
         });
     }
@@ -318,7 +317,7 @@ function attachEventListeners() {
 
 // Remove item from the cart and update localStorage
 function removeFromCart(itemImage) {
-    console.log("Removing item with Image Src:", itemImage); // Debugging: Check item being removed
+    console.log("Removing item with Image Src:", itemImage);
     
     // Remove the item based on its image source
     cartItems = cartItems.filter(item => item.image !== itemImage);
@@ -326,7 +325,7 @@ function removeFromCart(itemImage) {
     // Save updated cartItems to localStorage
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
     
-    renderCart(); // Re-render the cart after removal
+    renderCart();
 }
 
 
@@ -442,8 +441,8 @@ function getOrderTotal() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Assuming cartItems is loaded and available for the checkout page
-    updateOrderSummary();  // Call this to update the prices on the checkout page
+
+    updateOrderSummary();
 });
 
 
@@ -494,12 +493,11 @@ document.addEventListener("DOMContentLoaded", () => {
             } else if (option.id === "Cash on delivery") {
                 codDetails.style.display = "block";
             }
-            // Update the order summary based on the selected payment method
             updateOrderSummary();
         });
     });
 
-    // Your existing functionality starts here if elements are found
+    //existing functionality starts here if elements are found
     const validateForm = () => {
         const inputs = checkoutForm.querySelectorAll("input, textarea");
         
@@ -575,12 +573,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 //user logout logic
-
 document.getElementById('user-logo').addEventListener('click', function() {
     const logoutMenu = document.getElementById('logout-menu');
     logoutMenu.style.display = (logoutMenu.style.display === 'block') ? 'none' : 'block';
 });
-
 
 document.getElementById('logout-button').addEventListener('click', function() {
     window.location.href = "index.html";
