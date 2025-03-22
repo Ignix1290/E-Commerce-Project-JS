@@ -5,22 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ecommerce Js Project</title>
     <link rel="stylesheet" href="styles.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-    <form>
-        <h1>Sign in</h1>
-        <label for="email">Email</label>
-        <input type="text" id="email" placeholder="Email">
-        <label for="password">Password</label>
-        <input type="text" id="password" placeholder="Password">
-        <button type="button" id="signin" onclick="signIn(event)">Sign in</button>
-    </form>
-
-    <a href="signup.html">Create an account</a>
-
-    <!-- Google Sign-In Button -->
-    <button type="button" id="googleSignIn" onclick="googleSignIn()">Sign in with Google</button>
-
+    <div class="login-container">
+        <form class="login-form">
+            <h1>Sign in</h1>
+            <label for="email">Email</label>
+            <input type="text" id="email" class="login-input" placeholder="Email">
+            <label for="password">Password</label>
+            <input type="password" id="password" class="login-input" placeholder="Password">
+            <button type="button" id="signin" class="login-btn" onclick="signIn(event)">Sign in</button>
+        </form>
+    
+        <a href="signup.html" class="signup-link">Create an account</a>
+    
+        <!-- Google Sign-In Button -->
+        <button type="button" id="googleSignIn" class="google-btn" onclick="googleSignIn()"><i class='bx bxl-google'></i>Sign in with Google</button>
+    </div>
+    
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";

@@ -251,10 +251,12 @@ function addToCart(item) {
     if (existingItem) {
         // If item exists, increase the quantity
         existingItem.quantity += 1;
+        showCartPopup(`${item.name} quantity updated in cart!`);
         console.log(`Updated quantity for ${item.name}:`, existingItem.quantity); // Debugging
     } else {
         // If item does not exist, push the new item
         cartItems.push(item);
+        showCartPopup("Item added to cart!");
         console.log(`Added new item: ${item.name}`); // Debugging
     }
 
@@ -572,3 +574,29 @@ document.addEventListener("DOMContentLoaded", () => {
     loadCartFromStorage();
 });
 
+//user logout logic
+
+document.getElementById('user-logo').addEventListener('click', function() {
+    const logoutMenu = document.getElementById('logout-menu');
+    logoutMenu.style.display = (logoutMenu.style.display === 'block') ? 'none' : 'block';
+});
+
+
+document.getElementById('logout-button').addEventListener('click', function() {
+    window.location.href = "index.html";
+});
+
+// Function to show the cart popup
+function showCartPopup(message) {
+    const popup = document.getElementById("cart-popup");
+    const popupMessage = document.getElementById("popup-message");
+
+    popupMessage.textContent = message; // Set the message
+
+    popup.classList.add("show"); // Show the popup
+
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        popup.classList.remove("show");
+    }, 2000);
+}
